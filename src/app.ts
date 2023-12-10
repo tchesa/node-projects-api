@@ -3,15 +3,20 @@ import "./database";
 
 import authController from "./controllers/authController";
 import projectController from "./controllers/projectController";
+import { AppDataSource } from "./database";
 
-const app = express();
-app.use(express.json());
+AppDataSource.initialize()
+  .then(async () => {
+    const app = express();
+    app.use(express.json());
 
-authController(app);
-projectController(app);
+    authController(app);
+    projectController(app);
 
-app.get("/", (req, res) => {
-  return res.send("OK");
-});
+    app.get("/", (req, res) => {
+      return res.send("OK");
+    });
 
-app.listen(3000);
+    app.listen(3000);
+  })
+  .catch((error) => console.log(error));
